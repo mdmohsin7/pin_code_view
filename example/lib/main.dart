@@ -25,23 +25,27 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PinCode(
-        title: Text(
-          "Lock Screen",
-          style: TextStyle(
-              color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
-        ),
-        subTitle: Text(
-          "Hello Boys",
-          style: TextStyle(color: Colors.white),
-        ),
-        obscurePin: true, // to make pin * instead of number
-        codeLength: 6,
-        onCodeEntered: (code) {
-          //callback after full code has been entered
-          print(code);
-        },
+        body: PinCode(
+      title: Text(
+        "Lock Screen",
+        style: TextStyle(
+            color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
       ),
-    );
+
+      subTitle: Text(
+        "Enter the pin code",
+        style: TextStyle(color: Colors.white),
+      ),
+      codeLength: 6,
+      // you may skip correctPin and plugin will give you pin as
+      // call back of [onCodeFail] before it clears pin
+      correctPin: "123456",
+      onCodeSuccess: (code) {
+        print(code);
+      },
+      onCodeFail: (code) {
+        print(code);
+      },
+    ));
   }
 }

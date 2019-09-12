@@ -11,14 +11,19 @@ class PinCodeScreen extends StatelessWidget {
           style: TextStyle(
               color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
         ),
+
         subTitle: Text(
-          "Hello Boys",
+          "Enter the pin code",
           style: TextStyle(color: Colors.white),
         ),
-        obscurePin: true, // to make pin * instead of number
         codeLength: 6,
-        onCodeEntered: (code) {
-          //callback after full code has been entered
+        // you may skip correctPin and plugin will give you pin as
+        // call back of [onCodeFail] before it clears pin
+        correctPin: "123456",
+        onCodeSuccess: (code) {
+          print(code);
+        },
+        onCodeFail: (code) {
           print(code);
         },
       ),

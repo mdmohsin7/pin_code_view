@@ -27,12 +27,14 @@ class CodeViewState extends State<CodeView> {
     for (var i = 0; i < widget.length; i++) {
       widgets.add(
         Container(
-          margin: EdgeInsets.all(5.0),
+          margin: EdgeInsets.all(3.0),
           decoration: BoxDecoration(
             color: Colors.black12,
             border: Border(bottom: BorderSide(color: Colors.white)),
           ),
           padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+          height: 54,
+          width: 48,
           child: Text(
             getCodeAt(i + 1),
             textAlign: TextAlign.center,
@@ -48,6 +50,7 @@ class CodeViewState extends State<CodeView> {
   @override
   Widget build(BuildContext context) {
     return Wrap(
+      alignment: WrapAlignment.center,
       children: _getCodeViews(),
     );
   }

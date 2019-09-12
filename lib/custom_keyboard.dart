@@ -17,118 +17,79 @@ class CustomKeyboardState extends State<CustomKeyboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-          child: Row(
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              IconButton(
-                onPressed: () => widget.onPressedKey("1"),
-                icon: Text(
-                  "1",
-                  style: widget.textStyle,
-                ),
+              NumPad(
+                widget: widget,
+                digit: '1',
               ),
-              IconButton(
-                onPressed: () => widget.onPressedKey("2"),
-                icon: Text(
-                  "2",
-                  style: widget.textStyle,
-                ),
+              NumPad(
+                widget: widget,
+                digit: '2',
               ),
-              IconButton(
-                onPressed: () => widget.onPressedKey("3"),
-                icon: Text(
-                  "3",
-                  style: widget.textStyle,
-                ),
+              NumPad(
+                widget: widget,
+                digit: '3',
               ),
             ],
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-          child: Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              IconButton(
-                onPressed: () => widget.onPressedKey("4"),
-                icon: Text(
-                  "4",
-                  style: widget.textStyle,
-                ),
+              NumPad(
+                widget: widget,
+                digit: '4',
               ),
-              IconButton(
-                onPressed: () => widget.onPressedKey("5"),
-                icon: Text(
-                  "5",
-                  style: widget.textStyle,
-                ),
+              NumPad(
+                widget: widget,
+                digit: '5',
               ),
-              IconButton(
-                onPressed: () => widget.onPressedKey("6"),
-                icon: Text(
-                  "6",
-                  style: widget.textStyle,
-                ),
+              NumPad(
+                widget: widget,
+                digit: '6',
               ),
             ],
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-          child: Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              IconButton(
-                onPressed: () => widget.onPressedKey("7"),
-                icon: Text(
-                  "7",
-                  style: widget.textStyle,
-                ),
+              NumPad(
+                widget: widget,
+                digit: '7',
               ),
-              IconButton(
-                onPressed: () => widget.onPressedKey("8"),
-                icon: Text(
-                  "8",
-                  style: widget.textStyle,
-                ),
+              NumPad(
+                widget: widget,
+                digit: '8',
               ),
-              IconButton(
-                onPressed: () => widget.onPressedKey("9"),
-                icon: Text(
-                  "9",
-                  style: widget.textStyle,
-                ),
+              NumPad(
+                widget: widget,
+                digit: '9',
               ),
             ],
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),
-          child: Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              IconButton(
-                onPressed: () {},
+              NumPad(
+                widget: widget,
                 icon: Text(
-                  "",
+                  '',
                   style: widget.textStyle,
                 ),
               ),
-              IconButton(
-                onPressed: () => widget.onPressedKey("0"),
-                icon: Text(
-                  "0",
-                  style: widget.textStyle,
-                ),
+              NumPad(
+                widget: widget,
+                digit: '0',
               ),
-              IconButton(
-                onPressed: () => widget.onBackPressed(),
+              NumPad(
+                widget: widget,
                 icon: Icon(
                   Icons.backspace,
                   color: Colors.white,
@@ -136,8 +97,56 @@ class CustomKeyboardState extends State<CustomKeyboard> {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class NumPad extends StatelessWidget {
+  const NumPad({
+    Key key,
+    this.digit,
+    this.icon,
+    @required this.widget,
+  }) : super(key: key);
+
+  final CustomKeyboard widget;
+  final String digit;
+  final Widget icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Center(
+        child: Container(
+          child: Material(
+            color: Colors.transparent,
+            child: icon != null && icon is Text
+                ? Container(
+                    height: 48,
+                    width: 48,
+                    child: Center(
+                        child: icon != null
+                            ? icon
+                            : Text(digit, style: widget.textStyle)),
+                  )
+                : InkWell(
+                    borderRadius: BorderRadius.all(Radius.circular(48)),
+                    onTap: () => icon != null
+                        ? icon is Icon ? widget.onBackPressed() : null
+                        : widget.onPressedKey(digit),
+                    child: Container(
+                      height: 48,
+                      width: 48,
+                      child: Center(
+                          child: icon != null
+                              ? icon
+                              : Text(digit, style: widget.textStyle)),
+                    )),
+          ),
         ),
-      ],
+      ),
     );
   }
 }

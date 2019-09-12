@@ -39,30 +39,37 @@ class PinCodeState extends State<PinCode> {
       color: widget.backgroundColor ?? Theme.of(context).primaryColor,
       child: Column(children: <Widget>[
         Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              children: <Widget>[
-                Expanded(child: Container()),
-                Container(
-                    padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 5.0),
-                    child: widget.title),
-                widget.subTitle,
-                Expanded(child: Container()),
-                CodeView(
-                  codeTextStyle: widget.codeTextStyle,
-                  code: smsCode,
-                  obscurePin: widget.obscurePin,
-                  length: widget.codeLength,
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 16,
+              ),
+              widget.title,
+              SizedBox(
+                height: 4,
+              ),
+              widget.subTitle,
+              Expanded(
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CodeView(
+                        codeTextStyle: widget.codeTextStyle,
+                        code: smsCode,
+                        obscurePin: widget.obscurePin,
+                        length: widget.codeLength,
+                      ),
+                      Text(
+                        '${widget.error}',
+                        style: this.widget.errorTextStyle,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
-                Text(
-                  '${widget.error}',
-                  style: this.widget.errorTextStyle,
-                  textAlign: TextAlign.center,
-                ),
-                Expanded(child: Container()),
-              ],
-            ),
+              )
+            ],
           ),
         ),
         CustomKeyboard(
