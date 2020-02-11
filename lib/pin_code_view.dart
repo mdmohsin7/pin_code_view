@@ -10,6 +10,8 @@ class PinCode extends StatefulWidget {
   final TextStyle keyTextStyle, codeTextStyle, errorTextStyle;
   final bool obscurePin;
   final Color backgroundColor;
+  final double minWidth;
+  final double maxWidth;
 
   PinCode({
     this.title,
@@ -24,6 +26,8 @@ class PinCode extends StatefulWidget {
     this.keyTextStyle = const TextStyle(color: Colors.white, fontSize: 25.0),
     this.codeTextStyle = const TextStyle(
         color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
+    this.minWidth = 300,
+    this.maxWidth = 500,
     this.backgroundColor,
   });
 
@@ -35,30 +39,45 @@ class PinCodeState extends State<PinCode> {
 
   @override
   Widget build(BuildContext context) {
+    double _screenWidth = MediaQuery.of(context).size.width;
+    double _widgetWidth = _screenWidth * 0.8;
+    if (_widgetWidth < widget.minWidth) _widgetWidth = widget.minWidth;
+    if (_widgetWidth > widget.maxWidth) _widgetWidth = widget.maxWidth;
+
     return Container(
       color: widget.backgroundColor ?? Theme.of(context).primaryColor,
-      child: Column(children: <Widget>[
-        Expanded(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 16,
-              ),
-              widget.title,
-              SizedBox(
-                height: 4,
-              ),
-              widget.subTitle,
-              Expanded(
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+      height: double.infinity,
+      child: Container(
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
+          child: Container(
+            width: _widgetWidth,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 45,
+                  ),
+                  Column(
+                    children: <Widget>[
+                      widget.title,
+                      SizedBox(
+                        height: 4,
+                      ),
+                      widget.subTitle,
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Column(
                     children: <Widget>[
                       CodeView(
                         codeTextStyle: widget.codeTextStyle,
                         code: smsCode,
                         obscurePin: widget.obscurePin,
                         length: widget.codeLength,
+                        width: _widgetWidth,
                       ),
                       Text(
                         '${widget.error}',
@@ -67,37 +86,41 @@ class PinCodeState extends State<PinCode> {
                       ),
                     ],
                   ),
-                ),
-              )
-            ],
+                  SizedBox(
+                    height: 30,
+                  ),
+                  CustomKeyboard(
+                    textStyle: widget.keyTextStyle,
+                    onPressedKey: (key) {
+                      if (smsCode.length < widget.codeLength) {
+                        setState(() {
+                          smsCode = smsCode + key;
+                        });
+                      }
+                      if (smsCode.length == widget.codeLength) {
+                        if (smsCode == widget.correctPin) {
+                          widget.onCodeSuccess(smsCode);
+                        } else {
+                          widget.onCodeFail(smsCode);
+                          smsCode = "";
+                        }
+                      }
+                    },
+                    onBackPressed: () {
+                      int codeLength = smsCode.length;
+                      if (codeLength > 0)
+                        setState(() {
+                          smsCode = smsCode.substring(0, codeLength - 1);
+                        });
+                    },
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                ]),
           ),
         ),
-        CustomKeyboard(
-          textStyle: widget.keyTextStyle,
-          onPressedKey: (key) {
-            if (smsCode.length < widget.codeLength) {
-              setState(() {
-                smsCode = smsCode + key;
-              });
-            }
-            if (smsCode.length == widget.codeLength) {
-              if (smsCode == widget.correctPin) {
-                widget.onCodeSuccess(smsCode);
-              } else {
-                widget.onCodeFail(smsCode);
-                smsCode = "";
-              }
-            }
-          },
-          onBackPressed: () {
-            int codeLength = smsCode.length;
-            if (codeLength > 0)
-              setState(() {
-                smsCode = smsCode.substring(0, codeLength - 1);
-              });
-          },
-        ),
-      ]),
+      ),
     );
   }
 }

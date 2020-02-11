@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomKeyboard extends StatefulWidget {
   final Function onBackPressed, onPressedKey;
   final TextStyle textStyle;
+
   CustomKeyboard({
     this.onBackPressed,
     this.onPressedKey,
@@ -17,88 +18,85 @@ class CustomKeyboardState extends State<CustomKeyboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              NumPad(
-                widget: widget,
-                digit: '1',
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            NumPad(
+              widget: widget,
+              digit: '1',
+            ),
+            NumPad(
+              widget: widget,
+              digit: '2',
+            ),
+            NumPad(
+              widget: widget,
+              digit: '3',
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            NumPad(
+              widget: widget,
+              digit: '4',
+            ),
+            NumPad(
+              widget: widget,
+              digit: '5',
+            ),
+            NumPad(
+              widget: widget,
+              digit: '6',
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            NumPad(
+              widget: widget,
+              digit: '7',
+            ),
+            NumPad(
+              widget: widget,
+              digit: '8',
+            ),
+            NumPad(
+              widget: widget,
+              digit: '9',
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            NumPad(
+              widget: widget,
+              icon: Text(
+                '',
+                style: widget.textStyle,
               ),
-              NumPad(
-                widget: widget,
-                digit: '2',
+            ),
+            NumPad(
+              widget: widget,
+              digit: '0',
+            ),
+            NumPad(
+              widget: widget,
+              icon: Icon(
+                Icons.backspace,
+                color: Colors.white,
               ),
-              NumPad(
-                widget: widget,
-                digit: '3',
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              NumPad(
-                widget: widget,
-                digit: '4',
-              ),
-              NumPad(
-                widget: widget,
-                digit: '5',
-              ),
-              NumPad(
-                widget: widget,
-                digit: '6',
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              NumPad(
-                widget: widget,
-                digit: '7',
-              ),
-              NumPad(
-                widget: widget,
-                digit: '8',
-              ),
-              NumPad(
-                widget: widget,
-                digit: '9',
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              NumPad(
-                widget: widget,
-                icon: Text(
-                  '',
-                  style: widget.textStyle,
-                ),
-              ),
-              NumPad(
-                widget: widget,
-                digit: '0',
-              ),
-              NumPad(
-                widget: widget,
-                icon: Icon(
-                  Icons.backspace,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
