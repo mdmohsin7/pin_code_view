@@ -15,6 +15,7 @@ class PinCode extends StatefulWidget {
   final TextStyle keyTextStyle, codeTextStyle, errorTextStyle;
   final bool obscurePin;
   final Color backgroundColor;
+  final AssetImage backgroundImage;
   final double minWidth;
   final double maxWidth;
   final double buttonMaxSize;
@@ -44,6 +45,7 @@ class PinCode extends StatefulWidget {
     this.showKeyLetters = true,
     this.showBullets = true,
     this.backgroundColor,
+    this.backgroundImage,
   });
 
   PinCodeState createState() => PinCodeState();
@@ -60,7 +62,15 @@ class PinCodeState extends State<PinCode> {
     if (_widgetWidth > widget.maxWidth) _widgetWidth = widget.maxWidth;
 
     return Container(
-      color: widget.backgroundColor ?? Theme.of(context).primaryColor,
+      decoration: BoxDecoration(
+        color: widget.backgroundColor ?? Theme.of(context).primaryColor,
+        image: widget.backgroundImage != null
+            ? DecorationImage(
+                image: widget.backgroundImage,
+                fit: BoxFit.cover,
+              )
+            : null,
+      ),
       height: double.infinity,
       child: Container(
         alignment: Alignment.center,
