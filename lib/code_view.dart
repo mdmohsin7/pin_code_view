@@ -8,6 +8,7 @@ class CodeView extends StatefulWidget {
     this.codeTextStyle,
     this.obscurePin,
     this.width,
+    this.showBullets,
   });
 
   final String code;
@@ -15,49 +16,81 @@ class CodeView extends StatefulWidget {
   final bool obscurePin;
   final TextStyle codeTextStyle;
   final double width;
+  final bool showBullets;
 
   CodeViewState createState() => CodeViewState();
 }
 
 class CodeViewState extends State<CodeView> {
-  String getCodeAt(index) {
+  Widget getCodeAt(index) {
+    String code;
+
     if (widget.code == null || widget.code.length < index)
-      return "  ";
+      code = "  ";
     else if (widget.obscurePin) {
-      return "•";
+      code = "•";
     } else {
-      return widget.code.substring(index - 1, index);
+      code = widget.code.substring(index - 1, index);
+    }
+
+    return Text(
+      code,
+      textAlign: TextAlign.center,
+      style: widget.codeTextStyle,
+    );
+  }
+
+  Widget getBulletAt(index) {
+    if (widget.code == null || widget.code.length < index)
+      return Container();
+    else {
+      return Container(
+        width: 12,
+        height: 12,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(6),
+        ),
+      );
     }
   }
 
   _getCodeViews() {
     int _codeLength = widget.length;
-    double _gapWidth = 3;
-    double _spotWidth =
-        (widget.width - 1 - (_codeLength - 1) * _gapWidth) / _codeLength;
-    if (_spotWidth < 30) _spotWidth = 30;
-    if (_spotWidth > 50) _spotWidth = 50;
-    double _spotHeight = _spotWidth * 1.1;
+    double _gapSize = widget.showBullets ? 10 : 3;
+    double _inputWidth =
+        (widget.width - 1 - (_codeLength - 1) * _gapSize) / _codeLength;
+    if (_inputWidth < 30) _inputWidth = 30;
+    if (_inputWidth > 50) _inputWidth = 50;
+    double _inputHeight = _inputWidth * 1.1;
+
+    if (widget.showBullets) {
+      _inputWidth = _inputHeight = 20;
+    }
 
     List<Widget> widgets = [];
     for (var i = 0; i < _codeLength; i++) {
       widgets.add(
         Container(
-          alignment: Alignment.center,
-          margin: EdgeInsets.only(
-              right: i == _codeLength - 1 ? 0 : _gapWidth, bottom: _gapWidth),
-          decoration: BoxDecoration(
-            color: Colors.black12,
-            border: Border(bottom: BorderSide(color: Colors.white)),
-          ),
-          height: _spotHeight,
-          width: _spotWidth,
-          child: Text(
-            getCodeAt(i + 1),
-            textAlign: TextAlign.center,
-            style: widget.codeTextStyle,
-          ),
-        ),
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(
+                right: i == _codeLength - 1 ? 0 : _gapSize, bottom: _gapSize),
+            decoration: BoxDecoration(
+              color: Colors.black12,
+              border: widget.showBullets
+                  ? Border(
+                      top: BorderSide(color: Colors.white),
+                      right: BorderSide(color: Colors.white),
+                      bottom: BorderSide(color: Colors.white),
+                      left: BorderSide(color: Colors.white),
+                    )
+                  : Border(bottom: BorderSide(color: Colors.white)),
+              borderRadius:
+                  widget.showBullets ? BorderRadius.circular(10) : null,
+            ),
+            height: _inputHeight,
+            width: _inputWidth,
+            child: widget.showBullets ? getBulletAt(i + 1) : getCodeAt(i + 1)),
       );
     }
 

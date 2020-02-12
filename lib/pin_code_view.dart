@@ -20,7 +20,8 @@ class PinCode extends StatefulWidget {
   final double buttonMaxSize;
   final PinCodeButtonShape buttonShape;
   final Color buttonColor;
-  final bool showLetters;
+  final bool showKeyLetters;
+  final bool showBullets;
 
   PinCode({
     this.title,
@@ -40,7 +41,8 @@ class PinCode extends StatefulWidget {
     this.buttonMaxSize = 70,
     this.buttonShape = PinCodeButtonShape.circle,
     this.buttonColor = const Color.fromARGB(40, 0, 0, 0),
-    this.showLetters = true,
+    this.showKeyLetters = true,
+    this.showBullets = true,
     this.backgroundColor,
   });
 
@@ -91,6 +93,7 @@ class PinCodeState extends State<PinCode> {
                         obscurePin: widget.obscurePin,
                         length: widget.codeLength,
                         width: _widgetWidth,
+                        showBullets: widget.showBullets,
                       ),
                       Text(
                         '${widget.error}',
@@ -100,7 +103,7 @@ class PinCodeState extends State<PinCode> {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 5,
                   ),
                   CustomKeyboard(
                     textStyle: widget.keyTextStyle,
@@ -108,7 +111,7 @@ class PinCodeState extends State<PinCode> {
                     numPadMaxSize: widget.buttonMaxSize,
                     numPadShape: widget.buttonShape,
                     numPadColor: widget.buttonColor,
-                    showLetters: widget.showLetters,
+                    showLetters: widget.showKeyLetters,
                     onPressedKey: (key) {
                       if (smsCode.length < widget.codeLength) {
                         setState(() {
