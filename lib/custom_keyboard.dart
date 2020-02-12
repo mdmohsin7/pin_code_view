@@ -21,14 +21,6 @@ class CustomKeyboard extends StatefulWidget {
     this.showLetters,
   });
 
-  get gapSize => width * 0.05;
-
-  get numPadSize {
-    double _numPadSize = (width - gapSize * 3) / 3;
-    if (_numPadSize > numPadMaxSize) _numPadSize = numPadMaxSize;
-    return _numPadSize;
-  }
-
   CustomKeyboardState createState() => CustomKeyboardState();
 }
 
@@ -142,17 +134,22 @@ class NumPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _gapSize = widget.width * 0.05;
+    double _numPadSize = (widget.width - _gapSize * 3) / 3;
+    if (_numPadSize > widget.numPadMaxSize) _numPadSize = widget.numPadMaxSize;
+    final double _screenWidth = MediaQuery.of(context).size.width;
+    if (_numPadSize > _screenWidth * 0.2) _numPadSize = _screenWidth * 0.2;
     final bool _isCircle = widget.numPadShape == PinCodeButtonShape.circle;
-    final double _borderRadius = _isCircle ? widget.numPadSize / 2 : 0;
+    final double _borderRadius = _isCircle ? _numPadSize / 2 : 0;
 
     return Container(
-      padding: EdgeInsets.all(widget.gapSize / 2),
+      padding: EdgeInsets.all(_gapSize / 2),
       child: Material(
         color: Colors.transparent,
         child: icon != null && icon is Text
             ? Container(
-                height: widget.numPadSize,
-                width: widget.numPadSize,
+                height: _numPadSize,
+                width: _numPadSize,
                 child: Center(
                     child: icon != null
                         ? icon
@@ -167,8 +164,8 @@ class NumPad extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: icon is Icon ? null : widget.numPadColor,
                       borderRadius: BorderRadius.circular(_borderRadius)),
-                  height: widget.numPadSize,
-                  width: widget.numPadSize,
+                  height: _numPadSize,
+                  width: _numPadSize,
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

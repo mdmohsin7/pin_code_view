@@ -38,8 +38,8 @@ class PinCode extends StatefulWidget {
     this.codeTextStyle = const TextStyle(
         color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
     this.minWidth = 300,
-    this.maxWidth = 500,
-    this.buttonMaxSize = 70,
+    this.maxWidth = 600,
+    this.buttonMaxSize = 90,
     this.buttonShape = PinCodeButtonShape.circle,
     this.buttonColor = const Color.fromARGB(40, 0, 0, 0),
     this.showKeyLetters = true,
