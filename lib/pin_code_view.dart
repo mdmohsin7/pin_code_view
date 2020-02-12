@@ -20,6 +20,7 @@ class PinCode extends StatefulWidget {
   final double buttonMaxSize;
   final PinCodeButtonShape buttonShape;
   final Color buttonColor;
+  final bool showLetters;
 
   PinCode({
     this.title,
@@ -39,6 +40,7 @@ class PinCode extends StatefulWidget {
     this.buttonMaxSize = 70,
     this.buttonShape = PinCodeButtonShape.circle,
     this.buttonColor = const Color.fromARGB(40, 0, 0, 0),
+    this.showLetters = true,
     this.backgroundColor,
   });
 
@@ -106,6 +108,7 @@ class PinCodeState extends State<PinCode> {
                     numPadMaxSize: widget.buttonMaxSize,
                     numPadShape: widget.buttonShape,
                     numPadColor: widget.buttonColor,
+                    showLetters: widget.showLetters,
                     onPressedKey: (key) {
                       if (smsCode.length < widget.codeLength) {
                         setState(() {

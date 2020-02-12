@@ -8,6 +8,7 @@ class CustomKeyboard extends StatefulWidget {
   final double numPadMaxSize;
   final PinCodeButtonShape numPadShape;
   final Color numPadColor;
+  final bool showLetters;
 
   CustomKeyboard({
     this.onBackPressed,
@@ -17,9 +18,11 @@ class CustomKeyboard extends StatefulWidget {
     this.numPadMaxSize,
     this.numPadShape,
     this.numPadColor,
+    this.showLetters,
   });
 
   get gapSize => width * 0.05;
+
   get numPadSize {
     double _numPadSize = (width - gapSize * 3) / 3;
     if (_numPadSize > numPadMaxSize) _numPadSize = numPadMaxSize;
@@ -46,10 +49,12 @@ class CustomKeyboardState extends State<CustomKeyboard> {
             NumPad(
               widget: widget,
               digit: '2',
+              letters: 'ABC',
             ),
             NumPad(
               widget: widget,
               digit: '3',
+              letters: 'DEF',
             ),
           ],
         ),
@@ -59,14 +64,17 @@ class CustomKeyboardState extends State<CustomKeyboard> {
             NumPad(
               widget: widget,
               digit: '4',
+              letters: 'GHI',
             ),
             NumPad(
               widget: widget,
               digit: '5',
+              letters: 'JKL',
             ),
             NumPad(
               widget: widget,
               digit: '6',
+              letters: 'MNO',
             ),
           ],
         ),
@@ -76,14 +84,17 @@ class CustomKeyboardState extends State<CustomKeyboard> {
             NumPad(
               widget: widget,
               digit: '7',
+              letters: 'PQRS',
             ),
             NumPad(
               widget: widget,
               digit: '8',
+              letters: 'TUV',
             ),
             NumPad(
               widget: widget,
               digit: '9',
+              letters: 'WXYZ',
             ),
           ],
         ),
@@ -120,11 +131,13 @@ class NumPad extends StatelessWidget {
     Key key,
     this.digit,
     this.icon,
+    this.letters,
     @required this.widget,
   }) : super(key: key);
 
   final CustomKeyboard widget;
   final String digit;
+  final String letters;
   final Widget icon;
 
   @override
@@ -146,22 +159,35 @@ class NumPad extends StatelessWidget {
                         : Text(digit, style: widget.textStyle)),
               )
             : InkWell(
-                borderRadius:
-                    BorderRadius.all(Radius.circular(_borderRadius)),
+                borderRadius: BorderRadius.all(Radius.circular(_borderRadius)),
                 onTap: () => icon != null
                     ? icon is Icon ? widget.onBackPressed() : null
                     : widget.onPressedKey(digit),
                 child: Container(
                   decoration: BoxDecoration(
                       color: icon is Icon ? null : widget.numPadColor,
-                      borderRadius:
-                          BorderRadius.circular(_borderRadius)),
+                      borderRadius: BorderRadius.circular(_borderRadius)),
                   height: widget.numPadSize,
                   width: widget.numPadSize,
                   child: Center(
-                      child: icon != null
-                          ? icon
-                          : Text(digit, style: widget.textStyle)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        icon != null
+                            ? icon
+                            : Text(digit, style: widget.textStyle),
+                        widget.showLetters
+                            ? Text(
+                                letters != null ? letters : ' ',
+                                style: TextStyle(
+                                  color: widget.textStyle.color,
+                                  fontSize: widget.textStyle.fontSize / 2.5,
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ),
                 )),
       ),
     );
