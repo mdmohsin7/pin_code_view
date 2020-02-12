@@ -3,12 +3,23 @@ import 'package:flutter/material.dart';
 class CustomKeyboard extends StatefulWidget {
   final Function onBackPressed, onPressedKey;
   final TextStyle textStyle;
+  final double width;
+  final double numPadMaxSize;
 
   CustomKeyboard({
     this.onBackPressed,
     this.onPressedKey,
     this.textStyle,
+    this.width,
+    this.numPadMaxSize,
   });
+
+  get gapSize => width * 0.05;
+  get numPadSize {
+    double _numPadSize = (width - gapSize * 3) / 3;
+    if (_numPadSize > numPadMaxSize) _numPadSize = numPadMaxSize;
+    return _numPadSize;
+  }
 
   CustomKeyboardState createState() => CustomKeyboardState();
 }
@@ -19,11 +30,9 @@ class CustomKeyboardState extends State<CustomKeyboard> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             NumPad(
               widget: widget,
@@ -40,7 +49,7 @@ class CustomKeyboardState extends State<CustomKeyboard> {
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             NumPad(
               widget: widget,
@@ -57,7 +66,7 @@ class CustomKeyboardState extends State<CustomKeyboard> {
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             NumPad(
               widget: widget,
@@ -74,7 +83,7 @@ class CustomKeyboardState extends State<CustomKeyboard> {
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             NumPad(
               widget: widget,
@@ -115,35 +124,37 @@ class NumPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Container(
-          child: Material(
-            color: Colors.transparent,
-            child: icon != null && icon is Text
-                ? Container(
-                    height: 48,
-                    width: 48,
-                    child: Center(
-                        child: icon != null
-                            ? icon
-                            : Text(digit, style: widget.textStyle)),
-                  )
-                : InkWell(
-                    borderRadius: BorderRadius.all(Radius.circular(48)),
-                    onTap: () => icon != null
-                        ? icon is Icon ? widget.onBackPressed() : null
-                        : widget.onPressedKey(digit),
-                    child: Container(
-                      height: 48,
-                      width: 48,
-                      child: Center(
-                          child: icon != null
-                              ? icon
-                              : Text(digit, style: widget.textStyle)),
-                    )),
-          ),
-        ),
+    return Container(
+      padding: EdgeInsets.all(widget.gapSize / 2),
+      child: Material(
+        color: Colors.transparent,
+        child: icon != null && icon is Text
+            ? Container(
+                height: widget.numPadSize,
+                width: widget.numPadSize,
+                child: Center(
+                    child: icon != null
+                        ? icon
+                        : Text(digit, style: widget.textStyle)),
+              )
+            : InkWell(
+                borderRadius:
+                    BorderRadius.all(Radius.circular(widget.numPadSize / 2)),
+                onTap: () => icon != null
+                    ? icon is Icon ? widget.onBackPressed() : null
+                    : widget.onPressedKey(digit),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: icon is Icon ? null : Color.fromARGB(40, 0, 0, 0),
+                      borderRadius:
+                          BorderRadius.circular(widget.numPadSize / 2)),
+                  height: widget.numPadSize,
+                  width: widget.numPadSize,
+                  child: Center(
+                      child: icon != null
+                          ? icon
+                          : Text(digit, style: widget.textStyle)),
+                )),
       ),
     );
   }

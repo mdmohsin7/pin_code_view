@@ -12,6 +12,7 @@ class PinCode extends StatefulWidget {
   final Color backgroundColor;
   final double minWidth;
   final double maxWidth;
+  final double buttonMaxSize;
 
   PinCode({
     this.title,
@@ -28,6 +29,7 @@ class PinCode extends StatefulWidget {
         color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
     this.minWidth = 300,
     this.maxWidth = 500,
+    this.buttonMaxSize = 70,
     this.backgroundColor,
   });
 
@@ -87,10 +89,12 @@ class PinCodeState extends State<PinCode> {
                     ],
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 20,
                   ),
                   CustomKeyboard(
                     textStyle: widget.keyTextStyle,
+                    width: _widgetWidth,
+                    numPadMaxSize: widget.buttonMaxSize,
                     onPressedKey: (key) {
                       if (smsCode.length < widget.codeLength) {
                         setState(() {
