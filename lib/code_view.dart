@@ -48,7 +48,7 @@ class CodeViewState extends State<CodeView> {
         width: 12,
         height: 12,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: widget.codeTextStyle.color,
           borderRadius: BorderRadius.circular(6),
         ),
       );
@@ -78,12 +78,7 @@ class CodeViewState extends State<CodeView> {
             decoration: BoxDecoration(
               color: Colors.black12,
               border: widget.showBullets
-                  ? Border(
-                      top: BorderSide(color: Colors.white),
-                      right: BorderSide(color: Colors.white),
-                      bottom: BorderSide(color: Colors.white),
-                      left: BorderSide(color: Colors.white),
-                    )
+                  ? Border.all(color: widget.codeTextStyle.color)
                   : Border(bottom: BorderSide(color: Colors.white)),
               borderRadius:
                   widget.showBullets ? BorderRadius.circular(10) : null,
