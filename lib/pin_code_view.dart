@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import './custom_keyboard.dart';
 import './code_view.dart';
 
+enum PinCodeButtonShape {
+  circle,
+  square,
+}
+
 class PinCode extends StatefulWidget {
   final Text title, subTitle;
   final String error, correctPin;
@@ -13,6 +18,8 @@ class PinCode extends StatefulWidget {
   final double minWidth;
   final double maxWidth;
   final double buttonMaxSize;
+  final PinCodeButtonShape buttonShape;
+  final Color buttonColor;
 
   PinCode({
     this.title,
@@ -30,6 +37,8 @@ class PinCode extends StatefulWidget {
     this.minWidth = 300,
     this.maxWidth = 500,
     this.buttonMaxSize = 70,
+    this.buttonShape = PinCodeButtonShape.circle,
+    this.buttonColor = const Color.fromARGB(40, 0, 0, 0),
     this.backgroundColor,
   });
 
@@ -95,6 +104,8 @@ class PinCodeState extends State<PinCode> {
                     textStyle: widget.keyTextStyle,
                     width: _widgetWidth,
                     numPadMaxSize: widget.buttonMaxSize,
+                    numPadShape: widget.buttonShape,
+                    numPadColor: widget.buttonColor,
                     onPressedKey: (key) {
                       if (smsCode.length < widget.codeLength) {
                         setState(() {

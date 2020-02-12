@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:pin_code_view/pin_code_view.dart';
 
 class CustomKeyboard extends StatefulWidget {
   final Function onBackPressed, onPressedKey;
   final TextStyle textStyle;
   final double width;
   final double numPadMaxSize;
+  final PinCodeButtonShape numPadShape;
+  final Color numPadColor;
 
   CustomKeyboard({
     this.onBackPressed,
@@ -12,6 +15,8 @@ class CustomKeyboard extends StatefulWidget {
     this.textStyle,
     this.width,
     this.numPadMaxSize,
+    this.numPadShape,
+    this.numPadColor,
   });
 
   get gapSize => width * 0.05;
@@ -124,6 +129,9 @@ class NumPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool _isCircle = widget.numPadShape == PinCodeButtonShape.circle;
+    final double _borderRadius = _isCircle ? widget.numPadSize / 2 : 0;
+
     return Container(
       padding: EdgeInsets.all(widget.gapSize / 2),
       child: Material(
@@ -139,15 +147,15 @@ class NumPad extends StatelessWidget {
               )
             : InkWell(
                 borderRadius:
-                    BorderRadius.all(Radius.circular(widget.numPadSize / 2)),
+                    BorderRadius.all(Radius.circular(_borderRadius)),
                 onTap: () => icon != null
                     ? icon is Icon ? widget.onBackPressed() : null
                     : widget.onPressedKey(digit),
                 child: Container(
                   decoration: BoxDecoration(
-                      color: icon is Icon ? null : Color.fromARGB(40, 0, 0, 0),
+                      color: icon is Icon ? null : widget.numPadColor,
                       borderRadius:
-                          BorderRadius.circular(widget.numPadSize / 2)),
+                          BorderRadius.circular(_borderRadius)),
                   height: widget.numPadSize,
                   width: widget.numPadSize,
                   child: Center(
