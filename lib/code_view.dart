@@ -24,7 +24,7 @@ class CodeViewState extends State<CodeView> {
     if (widget.code == null || widget.code.length < index)
       return "  ";
     else if (widget.obscurePin) {
-      return "*";
+      return "•";
     } else {
       return widget.code.substring(index - 1, index);
     }
