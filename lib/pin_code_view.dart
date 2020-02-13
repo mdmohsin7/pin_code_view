@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import './custom_keyboard.dart';
 import './code_view.dart';
 
-enum PinCodeButtonShape {
+enum PinCodeKeyShape {
   circle,
   square,
 }
@@ -15,14 +15,16 @@ class PinCode extends StatefulWidget {
   final TextStyle keyTextStyle, codeTextStyle, errorTextStyle;
   final bool obscurePin;
   final Color backgroundColor;
-  final AssetImage backgroundImage;
+  final ImageProvider backgroundImage;
   final double minWidth;
   final double maxWidth;
-  final double buttonMaxSize;
-  final PinCodeButtonShape buttonShape;
-  final Color buttonColor;
+  final double keyMaxSize;
+  final PinCodeKeyShape keyShape;
+  final Color keyColor;
   final bool showKeyLetters;
   final bool showBullets;
+  final Color bulletColor;
+  final double bulletSize;
 
   PinCode({
     this.title,
@@ -39,11 +41,13 @@ class PinCode extends StatefulWidget {
         color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
     this.minWidth = 300,
     this.maxWidth = 600,
-    this.buttonMaxSize = 90,
-    this.buttonShape = PinCodeButtonShape.circle,
-    this.buttonColor = const Color.fromARGB(40, 0, 0, 0),
+    this.keyMaxSize = 90,
+    this.keyShape = PinCodeKeyShape.circle,
+    this.keyColor = const Color.fromARGB(40, 0, 0, 0),
     this.showKeyLetters = true,
     this.showBullets = true,
+    this.bulletColor = Colors.white,
+    this.bulletSize = 20,
     this.backgroundColor,
     this.backgroundImage,
   });
@@ -104,6 +108,8 @@ class PinCodeState extends State<PinCode> {
                         length: widget.codeLength,
                         width: _widgetWidth,
                         showBullets: widget.showBullets,
+                        bulletColor: widget.bulletColor,
+                        bulletSize: widget.bulletSize,
                       ),
                       Text(
                         '${widget.error}',
@@ -118,9 +124,9 @@ class PinCodeState extends State<PinCode> {
                   CustomKeyboard(
                     textStyle: widget.keyTextStyle,
                     width: _widgetWidth,
-                    numPadMaxSize: widget.buttonMaxSize,
-                    numPadShape: widget.buttonShape,
-                    numPadColor: widget.buttonColor,
+                    numPadMaxSize: widget.keyMaxSize,
+                    numPadShape: widget.keyShape,
+                    numPadColor: widget.keyColor,
                     showLetters: widget.showKeyLetters,
                     onPressedKey: (key) {
                       if (smsCode.length < widget.codeLength) {

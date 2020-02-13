@@ -6,7 +6,7 @@ class CustomKeyboard extends StatefulWidget {
   final TextStyle textStyle;
   final double width;
   final double numPadMaxSize;
-  final PinCodeButtonShape numPadShape;
+  final PinCodeKeyShape numPadShape;
   final Color numPadColor;
   final bool showLetters;
 
@@ -139,7 +139,7 @@ class NumPad extends StatelessWidget {
     if (_numPadSize > widget.numPadMaxSize) _numPadSize = widget.numPadMaxSize;
     final double _screenWidth = MediaQuery.of(context).size.width;
     if (_numPadSize > _screenWidth * 0.2) _numPadSize = _screenWidth * 0.2;
-    final bool _isCircle = widget.numPadShape == PinCodeButtonShape.circle;
+    final bool _isCircle = widget.numPadShape == PinCodeKeyShape.circle;
     final double _borderRadius = _isCircle ? _numPadSize / 2 : 0;
 
     return Container(

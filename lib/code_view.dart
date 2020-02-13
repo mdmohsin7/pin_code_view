@@ -9,6 +9,8 @@ class CodeView extends StatefulWidget {
     this.obscurePin,
     this.width,
     this.showBullets,
+    this.bulletColor,
+    this.bulletSize,
   });
 
   final String code;
@@ -17,6 +19,8 @@ class CodeView extends StatefulWidget {
   final TextStyle codeTextStyle;
   final double width;
   final bool showBullets;
+  final Color bulletColor;
+  final double bulletSize;
 
   CodeViewState createState() => CodeViewState();
 }
@@ -45,11 +49,11 @@ class CodeViewState extends State<CodeView> {
       return Container();
     else {
       return Container(
-        width: 12,
-        height: 12,
+        width: widget.bulletSize * 0.7,
+        height: widget.bulletSize * 0.7,
         decoration: BoxDecoration(
-          color: widget.codeTextStyle.color,
-          borderRadius: BorderRadius.circular(6),
+          color: widget.bulletColor,
+          borderRadius: BorderRadius.circular(widget.bulletSize * 0.7 / 2),
         ),
       );
     }
@@ -65,7 +69,7 @@ class CodeViewState extends State<CodeView> {
     double _inputHeight = _inputWidth * 1.1;
 
     if (widget.showBullets) {
-      _inputWidth = _inputHeight = 20;
+      _inputWidth = _inputHeight = widget.bulletSize;
     }
 
     List<Widget> widgets = [];
@@ -78,7 +82,7 @@ class CodeViewState extends State<CodeView> {
             decoration: BoxDecoration(
               color: Colors.black12,
               border: widget.showBullets
-                  ? Border.all(color: widget.codeTextStyle.color)
+                  ? Border.all(color: widget.bulletColor)
                   : Border(bottom: BorderSide(color: Colors.white)),
               borderRadius:
                   widget.showBullets ? BorderRadius.circular(10) : null,
