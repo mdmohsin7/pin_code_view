@@ -14,10 +14,9 @@ class PinCode extends StatefulWidget {
   final double minWidth;
   final double maxWidth;
   final double keyMaxSize;
-  final BoxDecoration keyDecoration;
+  final BoxDecoration keyDecoration, codeDecoration, bulletDecoration;
   final bool showKeyLetters;
   final bool showBullets;
-  final Color bulletColor;
   final double bulletSize;
 
   PinCode({
@@ -40,9 +39,22 @@ class PinCode extends StatefulWidget {
       shape: BoxShape.circle,
       color: Color.fromARGB(40, 0, 0, 0),
     ),
+    this.codeDecoration = const BoxDecoration(
+      color: Colors.black12,
+      border: Border(bottom: BorderSide(color: Colors.white)),
+    ),
+    this.bulletDecoration = const BoxDecoration(
+      color:  Colors.white,
+      shape: BoxShape.circle,
+      border: Border(
+          bottom: BorderSide(color: Colors.white),
+          top: BorderSide(color: Colors.white),
+          left: BorderSide(color: Colors.white),
+          right: BorderSide(color: Colors.white),
+      ),
+    ),
     this.showKeyLetters = true,
     this.showBullets = true,
-    this.bulletColor = Colors.white,
     this.bulletSize = 20,
     this.backgroundColor,
     this.backgroundImage,
@@ -104,8 +116,9 @@ class PinCodeState extends State<PinCode> {
                         length: widget.codeLength,
                         width: _widgetWidth,
                         showBullets: widget.showBullets,
-                        bulletColor: widget.bulletColor,
                         bulletSize: widget.bulletSize,
+                        bulletDecoration: widget.bulletDecoration,
+                        codeDecoration: widget.codeDecoration,
                       ),
                       Text(
                         '${widget.error}',

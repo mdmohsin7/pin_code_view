@@ -9,17 +9,18 @@ class CodeView extends StatefulWidget {
     this.obscurePin,
     this.width,
     this.showBullets,
-    this.bulletColor,
     this.bulletSize,
+    this.bulletDecoration,
+    this.codeDecoration,
   });
 
   final String code;
   final int length;
   final bool obscurePin;
   final TextStyle codeTextStyle;
+  final BoxDecoration bulletDecoration, codeDecoration;
   final double width;
   final bool showBullets;
-  final Color bulletColor;
   final double bulletSize;
 
   CodeViewState createState() => CodeViewState();
@@ -51,9 +52,8 @@ class CodeViewState extends State<CodeView> {
       return Container(
         width: widget.bulletSize * 0.7,
         height: widget.bulletSize * 0.7,
-        decoration: BoxDecoration(
-          color: widget.bulletColor,
-          borderRadius: BorderRadius.circular(widget.bulletSize * 0.7 / 2),
+        decoration: widget.bulletDecoration.copyWith(
+          border: null,
         ),
       );
     }
@@ -79,14 +79,10 @@ class CodeViewState extends State<CodeView> {
             alignment: Alignment.center,
             margin: EdgeInsets.only(
                 right: i == _codeLength - 1 ? 0 : _gapSize, bottom: _gapSize),
-            decoration: BoxDecoration(
-              color: Colors.black12,
-              border: widget.showBullets
-                  ? Border.all(color: widget.bulletColor)
-                  : Border(bottom: BorderSide(color: Colors.white)),
-              borderRadius:
-                  widget.showBullets ? BorderRadius.circular(10) : null,
-            ),
+            decoration: widget.showBullets
+                ? widget.bulletDecoration
+                    .copyWith(color: widget.codeDecoration.color)
+                : widget.codeDecoration,
             height: _inputHeight,
             width: _inputWidth,
             child: widget.showBullets ? getBulletAt(i + 1) : getCodeAt(i + 1)),
