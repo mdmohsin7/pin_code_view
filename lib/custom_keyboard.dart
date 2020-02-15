@@ -160,7 +160,9 @@ class NumPad extends StatelessWidget {
                     : widget.onPressedKey(digit),
                 child: Container(
                   decoration: widget.keyDecoration.copyWith(
-                    color: icon is Icon ? null : widget.keyDecoration.color,
+                    color: icon is Icon
+                        ? Colors.transparent
+                        : widget.keyDecoration.color,
                   ),
                   height: _numPadSize,
                   width: _numPadSize,
