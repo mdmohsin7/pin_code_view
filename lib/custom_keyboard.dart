@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pin_code_view/pin_code_view.dart';
 
 class CustomKeyboard extends StatefulWidget {
   final Function onBackPressed, onPressedKey;
   final TextStyle textStyle;
   final double width;
   final double numPadMaxSize;
-  final PinCodeKeyShape numPadShape;
-  final Color numPadColor;
   final bool showLetters;
+  final BoxDecoration keyDecoration;
 
   CustomKeyboard({
     this.onBackPressed,
@@ -16,8 +14,7 @@ class CustomKeyboard extends StatefulWidget {
     this.textStyle,
     this.width,
     this.numPadMaxSize,
-    this.numPadShape,
-    this.numPadColor,
+    this.keyDecoration,
     this.showLetters,
   });
 
@@ -139,8 +136,7 @@ class NumPad extends StatelessWidget {
     if (_numPadSize > widget.numPadMaxSize) _numPadSize = widget.numPadMaxSize;
     final double _screenWidth = MediaQuery.of(context).size.width;
     if (_numPadSize > _screenWidth * 0.2) _numPadSize = _screenWidth * 0.2;
-    final bool _isCircle = widget.numPadShape == PinCodeKeyShape.circle;
-    final double _borderRadius = _isCircle ? _numPadSize / 2 : 0;
+    final bool _isCircle = widget.keyDecoration.shape == BoxShape.circle;
 
     return Container(
       padding: EdgeInsets.all(_gapSize / 2),
@@ -156,14 +152,16 @@ class NumPad extends StatelessWidget {
                         : Text(digit, style: widget.textStyle)),
               )
             : InkWell(
-                borderRadius: BorderRadius.all(Radius.circular(_borderRadius)),
+                borderRadius: _isCircle
+                    ? BorderRadius.circular(_numPadSize / 2)
+                    : widget.keyDecoration.borderRadius,
                 onTap: () => icon != null
                     ? icon is Icon ? widget.onBackPressed() : null
                     : widget.onPressedKey(digit),
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: icon is Icon ? null : widget.numPadColor,
-                      borderRadius: BorderRadius.circular(_borderRadius)),
+                  decoration: widget.keyDecoration.copyWith(
+                    color: icon is Icon ? null : widget.keyDecoration.color,
+                  ),
                   height: _numPadSize,
                   width: _numPadSize,
                   child: Center(
