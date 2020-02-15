@@ -53,7 +53,7 @@ class CodeViewState extends State<CodeView> {
         width: widget.bulletSize * 0.7,
         height: widget.bulletSize * 0.7,
         decoration: widget.bulletDecoration.copyWith(
-          border: null,
+          border: Border.all(width: 0),
         ),
       );
     }
