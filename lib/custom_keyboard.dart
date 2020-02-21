@@ -7,6 +7,7 @@ class CustomKeyboard extends StatefulWidget {
   final double numPadMaxSize;
   final bool showLetters;
   final BoxDecoration keyDecoration;
+  final bool isDisabled;
 
   CustomKeyboard({
     this.onBackPressed,
@@ -16,6 +17,7 @@ class CustomKeyboard extends StatefulWidget {
     this.numPadMaxSize,
     this.keyDecoration,
     this.showLetters,
+    this.isDisabled,
   });
 
   CustomKeyboardState createState() => CustomKeyboardState();
@@ -26,91 +28,94 @@ class CustomKeyboardState extends State<CustomKeyboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            NumPad(
-              widget: widget,
-              digit: '1',
-            ),
-            NumPad(
-              widget: widget,
-              digit: '2',
-              letters: 'ABC',
-            ),
-            NumPad(
-              widget: widget,
-              digit: '3',
-              letters: 'DEF',
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            NumPad(
-              widget: widget,
-              digit: '4',
-              letters: 'GHI',
-            ),
-            NumPad(
-              widget: widget,
-              digit: '5',
-              letters: 'JKL',
-            ),
-            NumPad(
-              widget: widget,
-              digit: '6',
-              letters: 'MNO',
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            NumPad(
-              widget: widget,
-              digit: '7',
-              letters: 'PQRS',
-            ),
-            NumPad(
-              widget: widget,
-              digit: '8',
-              letters: 'TUV',
-            ),
-            NumPad(
-              widget: widget,
-              digit: '9',
-              letters: 'WXYZ',
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            NumPad(
-              widget: widget,
-              icon: Text(
-                '',
-                style: widget.textStyle,
+    return Opacity(
+      opacity: widget.isDisabled ? 0.4 : 1.0,
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              NumPad(
+                widget: widget,
+                digit: '1',
               ),
-            ),
-            NumPad(
-              widget: widget,
-              digit: '0',
-            ),
-            NumPad(
-              widget: widget,
-              icon: Icon(
-                Icons.backspace,
-                color: Colors.white,
+              NumPad(
+                widget: widget,
+                digit: '2',
+                letters: 'ABC',
               ),
-            ),
-          ],
-        ),
-      ],
+              NumPad(
+                widget: widget,
+                digit: '3',
+                letters: 'DEF',
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              NumPad(
+                widget: widget,
+                digit: '4',
+                letters: 'GHI',
+              ),
+              NumPad(
+                widget: widget,
+                digit: '5',
+                letters: 'JKL',
+              ),
+              NumPad(
+                widget: widget,
+                digit: '6',
+                letters: 'MNO',
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              NumPad(
+                widget: widget,
+                digit: '7',
+                letters: 'PQRS',
+              ),
+              NumPad(
+                widget: widget,
+                digit: '8',
+                letters: 'TUV',
+              ),
+              NumPad(
+                widget: widget,
+                digit: '9',
+                letters: 'WXYZ',
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              NumPad(
+                widget: widget,
+                icon: Text(
+                  '',
+                  style: widget.textStyle,
+                ),
+              ),
+              NumPad(
+                widget: widget,
+                digit: '0',
+              ),
+              NumPad(
+                widget: widget,
+                icon: Icon(
+                  Icons.backspace,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -155,9 +160,11 @@ class NumPad extends StatelessWidget {
                 borderRadius: _isCircle
                     ? BorderRadius.circular(_numPadSize / 2)
                     : widget.keyDecoration.borderRadius,
-                onTap: () => icon != null
-                    ? icon is Icon ? widget.onBackPressed() : null
-                    : widget.onPressedKey(digit),
+                onTap: widget.isDisabled
+                    ? null
+                    : () => icon != null
+                        ? icon is Icon ? widget.onBackPressed() : null
+                        : widget.onPressedKey(digit),
                 child: Container(
                   decoration: widget.keyDecoration.copyWith(
                     color: icon is Icon
