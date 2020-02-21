@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import './custom_keyboard.dart';
 import './code_view.dart';
@@ -18,11 +20,13 @@ class PinCode extends StatefulWidget {
   final bool showKeyLetters;
   final bool showBullets;
   final double bulletSize;
+  final int errorDelaySeconds;
+  final Color errorDelayProgressColor;
 
   PinCode({
     this.title,
     this.correctPin = "****", // Default Value, use onCodeFail as onEnteredPin
-    this.error = '',
+    this.error = 'Wrong pin code!',
     this.subTitle,
     this.codeLength = 6,
     this.obscurePin = false,
@@ -44,13 +48,13 @@ class PinCode extends StatefulWidget {
       border: Border(bottom: BorderSide(color: Colors.white)),
     ),
     this.bulletDecoration = const BoxDecoration(
-      color:  Colors.white,
+      color: Colors.white,
       shape: BoxShape.circle,
       border: Border(
-          bottom: BorderSide(color: Colors.white),
-          top: BorderSide(color: Colors.white),
-          left: BorderSide(color: Colors.white),
-          right: BorderSide(color: Colors.white),
+        bottom: BorderSide(color: Colors.white),
+        top: BorderSide(color: Colors.white),
+        left: BorderSide(color: Colors.white),
+        right: BorderSide(color: Colors.white),
       ),
     ),
     this.showKeyLetters = true,
@@ -58,13 +62,35 @@ class PinCode extends StatefulWidget {
     this.bulletSize = 20,
     this.backgroundColor,
     this.backgroundImage,
+    this.errorDelaySeconds,
+    this.errorDelayProgressColor = Colors.white,
   });
 
   PinCodeState createState() => PinCodeState();
 }
 
-class PinCodeState extends State<PinCode> {
+class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
   String smsCode = "";
+  bool isFailed = false;
+  bool isDisabled = false;
+  AnimationController delayAnimationController;
+  Animation<double> delayAnimation;
+  Timer delayTimer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.errorDelaySeconds != null) {
+      delayAnimationController = AnimationController(
+          vsync: this, duration: Duration(seconds: widget.errorDelaySeconds));
+      delayAnimation =
+          Tween(begin: 0.0, end: 1.0).animate(delayAnimationController)
+            ..addListener(() {
+              setState(() {});
+            });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +98,21 @@ class PinCodeState extends State<PinCode> {
     double _widgetWidth = _screenWidth * 0.8;
     if (_widgetWidth < widget.minWidth) _widgetWidth = widget.minWidth;
     if (_widgetWidth > widget.maxWidth) _widgetWidth = widget.maxWidth;
+
+    Widget _buildErrorDelayProgress() {
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        width: _widgetWidth * 0.8,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(3),
+          child: LinearProgressIndicator(
+            value: delayAnimation.value,
+            valueColor: AlwaysStoppedAnimation(widget.errorDelayProgressColor),
+            backgroundColor: Colors.transparent,
+          ),
+        ),
+      );
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -121,16 +162,20 @@ class PinCodeState extends State<PinCode> {
                         codeDecoration: widget.codeDecoration,
                       ),
                       Text(
-                        '${widget.error}',
+                        isFailed ? '${widget.error}' : '',
                         style: this.widget.errorTextStyle,
                         textAlign: TextAlign.center,
                       ),
+                      widget.errorDelaySeconds != null
+                          ? _buildErrorDelayProgress()
+                          : Container(),
                     ],
                   ),
                   SizedBox(
                     height: 5,
                   ),
                   CustomKeyboard(
+                    isDisabled: isDisabled,
                     textStyle: widget.keyTextStyle,
                     width: _widgetWidth,
                     numPadMaxSize: widget.keyMaxSize,
@@ -139,6 +184,7 @@ class PinCodeState extends State<PinCode> {
                     onPressedKey: (key) {
                       if (smsCode.length < widget.codeLength) {
                         setState(() {
+                          isFailed = false;
                           smsCode = smsCode + key;
                         });
                       }
@@ -146,6 +192,23 @@ class PinCodeState extends State<PinCode> {
                         if (smsCode == widget.correctPin) {
                           widget.onCodeSuccess(smsCode);
                         } else {
+                          setState(() {
+                            isFailed = true;
+                          });
+                          if (widget.errorDelaySeconds != null) {
+                            setState(() {
+                              isDisabled = true;
+                            });
+                            delayAnimationController.forward();
+                            Timer(Duration(seconds: widget.errorDelaySeconds),
+                                () {
+                              delayAnimationController.reset();
+                              setState(() {
+                                isDisabled = false;
+                                isFailed = false;
+                              });
+                            });
+                          }
                           widget.onCodeFail(smsCode);
                           smsCode = "";
                         }
