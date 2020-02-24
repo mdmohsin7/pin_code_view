@@ -26,7 +26,7 @@ class PinCode extends StatefulWidget {
   PinCode({
     this.title,
     this.correctPin = "****", // Default Value, use onCodeFail as onEnteredPin
-    this.error = 'Wrong pin code!',
+    this.error = '',
     this.subTitle,
     this.codeLength = 6,
     this.obscurePin = false,
