@@ -37,7 +37,7 @@ class PinCode extends StatefulWidget {
     this.codeTextStyle = const TextStyle(
         color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.bold),
     this.minWidth = 300,
-    this.maxWidth = 600,
+    this.maxWidth = 400,
     this.keyMaxSize = 90,
     this.keyDecoration = const BoxDecoration(
       shape: BoxShape.circle,
@@ -102,13 +102,24 @@ class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
     Widget _buildErrorDelayProgress() {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 8),
-        width: _widgetWidth * 0.8,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(3),
-          child: LinearProgressIndicator(
-            value: delayAnimation.value,
-            valueColor: AlwaysStoppedAnimation(widget.errorDelayProgressColor),
-            backgroundColor: Colors.transparent,
+        width: _widgetWidth * 0.65,
+        child: Container(
+          padding: EdgeInsets.all(1),
+          decoration: BoxDecoration(
+            border: Border.all(
+                color: delayAnimation.value > 0
+                    ? widget.errorDelayProgressColor
+                    : Colors.transparent),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            child: LinearProgressIndicator(
+              value: delayAnimation.value,
+              valueColor:
+                  AlwaysStoppedAnimation(widget.errorDelayProgressColor),
+              backgroundColor: Colors.transparent,
+            ),
           ),
         ),
       );
