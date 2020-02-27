@@ -3,10 +3,21 @@ import 'package:flutter/material.dart';
 class CustomKeyboard extends StatefulWidget {
   final Function onBackPressed, onPressedKey;
   final TextStyle textStyle;
+  final double width;
+  final double numPadMaxSize;
+  final bool showLetters;
+  final BoxDecoration keyDecoration;
+  final bool isDisabled;
+
   CustomKeyboard({
     this.onBackPressed,
     this.onPressedKey,
     this.textStyle,
+    this.width,
+    this.numPadMaxSize,
+    this.keyDecoration,
+    this.showLetters,
+    this.isDisabled,
   });
 
   CustomKeyboardState createState() => CustomKeyboardState();
@@ -17,14 +28,12 @@ class CustomKeyboardState extends State<CustomKeyboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
+    return Opacity(
+      opacity: widget.isDisabled ? 0.4 : 1.0,
       child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               NumPad(
                 widget: widget,
@@ -33,49 +42,57 @@ class CustomKeyboardState extends State<CustomKeyboard> {
               NumPad(
                 widget: widget,
                 digit: '2',
+                letters: 'ABC',
               ),
               NumPad(
                 widget: widget,
                 digit: '3',
+                letters: 'DEF',
               ),
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               NumPad(
                 widget: widget,
                 digit: '4',
+                letters: 'GHI',
               ),
               NumPad(
                 widget: widget,
                 digit: '5',
+                letters: 'JKL',
               ),
               NumPad(
                 widget: widget,
                 digit: '6',
+                letters: 'MNO',
               ),
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               NumPad(
                 widget: widget,
                 digit: '7',
+                letters: 'PQRS',
               ),
               NumPad(
                 widget: widget,
                 digit: '8',
+                letters: 'TUV',
               ),
               NumPad(
                 widget: widget,
                 digit: '9',
+                letters: 'WXYZ',
               ),
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               NumPad(
                 widget: widget,
@@ -108,44 +125,74 @@ class NumPad extends StatelessWidget {
     Key key,
     this.digit,
     this.icon,
+    this.letters,
     @required this.widget,
   }) : super(key: key);
 
   final CustomKeyboard widget;
   final String digit;
+  final String letters;
   final Widget icon;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Container(
-          child: Material(
-            color: Colors.transparent,
-            child: icon != null && icon is Text
-                ? Container(
-                    height: 48,
-                    width: 48,
-                    child: Center(
-                        child: icon != null
-                            ? icon
-                            : Text(digit, style: widget.textStyle)),
-                  )
-                : InkWell(
-                    borderRadius: BorderRadius.all(Radius.circular(48)),
-                    onTap: () => icon != null
+    final double _gapSize = widget.width * 0.05;
+    double _numPadSize = (widget.width - _gapSize * 3) / 3;
+    if (_numPadSize > widget.numPadMaxSize) _numPadSize = widget.numPadMaxSize;
+    final double _screenWidth = MediaQuery.of(context).size.width;
+    if (_numPadSize > _screenWidth * 0.2) _numPadSize = _screenWidth * 0.2;
+    final bool _isCircle = widget.keyDecoration.shape == BoxShape.circle;
+
+    return Container(
+      padding: EdgeInsets.all(_gapSize / 2),
+      child: Material(
+        color: Colors.transparent,
+        child: icon != null && icon is Text
+            ? Container(
+                height: _numPadSize,
+                width: _numPadSize,
+                child: Center(
+                    child: icon != null
+                        ? icon
+                        : Text(digit, style: widget.textStyle)),
+              )
+            : InkWell(
+                borderRadius: _isCircle
+                    ? BorderRadius.circular(_numPadSize / 2)
+                    : widget.keyDecoration.borderRadius,
+                onTap: widget.isDisabled
+                    ? null
+                    : () => icon != null
                         ? icon is Icon ? widget.onBackPressed() : null
                         : widget.onPressedKey(digit),
-                    child: Container(
-                      height: 48,
-                      width: 48,
-                      child: Center(
-                          child: icon != null
-                              ? icon
-                              : Text(digit, style: widget.textStyle)),
-                    )),
-          ),
-        ),
+                child: Container(
+                  decoration: widget.keyDecoration.copyWith(
+                    color: icon is Icon
+                        ? Colors.transparent
+                        : widget.keyDecoration.color,
+                  ),
+                  height: _numPadSize,
+                  width: _numPadSize,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        icon != null
+                            ? icon
+                            : Text(digit, style: widget.textStyle),
+                        widget.showLetters
+                            ? Text(
+                                letters != null ? letters : ' ',
+                                style: TextStyle(
+                                  color: widget.textStyle.color,
+                                  fontSize: widget.textStyle.fontSize / 2.5,
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                )),
       ),
     );
   }
