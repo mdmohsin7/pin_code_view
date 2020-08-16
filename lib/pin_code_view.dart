@@ -93,6 +93,13 @@ class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    delayTimer?.cancel();
+    delayAnimationController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double _screenWidth = MediaQuery.of(context).size.width;
     double _widgetWidth = _screenWidth * 0.8;
@@ -211,7 +218,8 @@ class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
                               isDisabled = true;
                             });
                             delayAnimationController.forward();
-                            Timer(Duration(seconds: widget.errorDelaySeconds),
+                            delayTimer = Timer(
+                                Duration(seconds: widget.errorDelaySeconds),
                                 () {
                               delayAnimationController.reset();
                               setState(() {
