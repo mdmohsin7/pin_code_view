@@ -11,6 +11,7 @@ class PinCode extends StatefulWidget {
   final int codeLength;
   final TextStyle keyTextStyle, codeTextStyle, errorTextStyle;
   final bool obscurePin;
+  final Color backSpaceIconColor;
   final Color backgroundColor;
   final ImageProvider backgroundImage;
   final double minWidth;
@@ -57,6 +58,7 @@ class PinCode extends StatefulWidget {
         right: BorderSide(color: Colors.white),
       ),
     ),
+    this.backSpaceIconColor = Colors.white,
     this.showKeyLetters = true,
     this.showBullets = true,
     this.bulletSize = 20,
@@ -193,6 +195,7 @@ class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
                     height: 5,
                   ),
                   CustomKeyboard(
+                    backSpaceIconColor: backSpaceIconColor,
                     isDisabled: isDisabled,
                     textStyle: widget.keyTextStyle,
                     width: _widgetWidth,
