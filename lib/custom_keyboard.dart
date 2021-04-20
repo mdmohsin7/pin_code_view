@@ -5,21 +5,21 @@ class CustomKeyboard extends StatefulWidget {
   final TextStyle textStyle;
   final double width;
   final double numPadMaxSize;
+  final Color backSpaceIconColor;
   final bool showLetters;
   final BoxDecoration keyDecoration;
   final bool isDisabled;
-  final Color backSpaceIconColor;
 
   CustomKeyboard({
     this.onBackPressed,
     this.onPressedKey,
     this.textStyle,
     this.width,
+    this.backSpaceIconColor,
     this.numPadMaxSize,
     this.keyDecoration,
     this.showLetters,
     this.isDisabled,
-    this.backSpaceIconColor,
   });
 
   CustomKeyboardState createState() => CustomKeyboardState();
@@ -111,7 +111,7 @@ class CustomKeyboardState extends State<CustomKeyboard> {
                 widget: widget,
                 icon: Icon(
                   Icons.backspace,
-                  color: backSpaceIconColor ?? Colors.white,
+                  color: widget.backSpaceIconColor ?? Colors.white,
                 ),
               ),
             ],
@@ -165,7 +165,9 @@ class NumPad extends StatelessWidget {
                 onTap: widget.isDisabled
                     ? null
                     : () => icon != null
-                        ? icon is Icon ? widget.onBackPressed() : null
+                        ? icon is Icon
+                            ? widget.onBackPressed()
+                            : null
                         : widget.onPressedKey(digit),
                 child: Container(
                   decoration: widget.keyDecoration.copyWith(
