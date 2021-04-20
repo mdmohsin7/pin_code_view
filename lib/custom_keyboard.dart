@@ -8,6 +8,7 @@ class CustomKeyboard extends StatefulWidget {
   final bool showLetters;
   final BoxDecoration keyDecoration;
   final bool isDisabled;
+  final Color backSpaceIconColor;
 
   CustomKeyboard({
     this.onBackPressed,
@@ -18,6 +19,7 @@ class CustomKeyboard extends StatefulWidget {
     this.keyDecoration,
     this.showLetters,
     this.isDisabled,
+    this.backSpaceIconColor,
   });
 
   CustomKeyboardState createState() => CustomKeyboardState();
@@ -109,7 +111,7 @@ class CustomKeyboardState extends State<CustomKeyboard> {
                 widget: widget,
                 icon: Icon(
                   Icons.backspace,
-                  color: Colors.white,
+                  color: backSpaceIconColor ?? Colors.white,
                 ),
               ),
             ],
