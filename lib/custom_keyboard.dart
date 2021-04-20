@@ -109,7 +109,7 @@ class CustomKeyboardState extends State<CustomKeyboard> {
                 widget: widget,
                 icon: Icon(
                   Icons.backspace,
-                  color: Colors.white,
+                  color: widget.textStyle.color,
                 ),
               ),
             ],
@@ -163,7 +163,9 @@ class NumPad extends StatelessWidget {
                 onTap: widget.isDisabled
                     ? null
                     : () => icon != null
-                        ? icon is Icon ? widget.onBackPressed() : null
+                        ? icon is Icon
+                            ? widget.onBackPressed()
+                            : null
                         : widget.onPressedKey(digit),
                 child: Container(
                   decoration: widget.keyDecoration.copyWith(
