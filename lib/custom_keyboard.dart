@@ -5,7 +5,6 @@ class CustomKeyboard extends StatefulWidget {
   final TextStyle textStyle;
   final double width;
   final double numPadMaxSize;
-  final Color backSpaceIconColor;
   final bool showLetters;
   final BoxDecoration keyDecoration;
   final bool isDisabled;
@@ -15,7 +14,6 @@ class CustomKeyboard extends StatefulWidget {
     this.onPressedKey,
     this.textStyle,
     this.width,
-    this.backSpaceIconColor,
     this.numPadMaxSize,
     this.keyDecoration,
     this.showLetters,
@@ -111,7 +109,7 @@ class CustomKeyboardState extends State<CustomKeyboard> {
                 widget: widget,
                 icon: Icon(
                   Icons.backspace,
-                  color: widget.backSpaceIconColor ?? Colors.white,
+                  color: widget.textStyle.color,
                 ),
               ),
             ],
