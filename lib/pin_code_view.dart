@@ -12,7 +12,6 @@ class PinCode extends StatefulWidget {
   final TextStyle keyTextStyle, codeTextStyle, errorTextStyle;
   final bool obscurePin;
   final Color backgroundColor;
-  final Color backSpaceIconColor;
   final ImageProvider backgroundImage;
   final double minWidth;
   final double maxWidth;
@@ -64,7 +63,6 @@ class PinCode extends StatefulWidget {
     this.backgroundColor,
     this.backgroundImage,
     this.errorDelaySeconds,
-    this.backSpaceIconColor,
     this.errorDelayProgressColor = Colors.white,
   });
 
@@ -201,8 +199,6 @@ class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
                     numPadMaxSize: widget.keyMaxSize,
                     showLetters: widget.showKeyLetters,
                     keyDecoration: widget.keyDecoration,
-                    backSpaceIconColor:
-                        widget.backSpaceIconColor ?? Colors.white,
                     onPressedKey: (key) {
                       if (smsCode.length < widget.codeLength) {
                         setState(() {
