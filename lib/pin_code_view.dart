@@ -22,8 +22,7 @@ class PinCode extends StatefulWidget {
   final double bulletSize;
   final int errorDelaySeconds;
   final Color errorDelayProgressColor;
-  final String pin;
-  final Function(String) onPinChanged;
+  final bool clearOnAppStateChange;
 
   PinCode({
     this.title,
@@ -66,23 +65,25 @@ class PinCode extends StatefulWidget {
     this.backgroundImage,
     this.errorDelaySeconds,
     this.errorDelayProgressColor = Colors.white,
-    this.pin,
-    this.onPinChanged,
+    this.clearOnAppStateChange = false,
   });
 
   PinCodeState createState() => PinCodeState();
 }
 
-class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
+class PinCodeState extends State<PinCode>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   bool isFailed = false;
   bool isDisabled = false;
   AnimationController delayAnimationController;
   Animation<double> delayAnimation;
   Timer delayTimer;
+  String smsCode = '';
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     if (widget.errorDelaySeconds != null) {
       delayAnimationController = AnimationController(
@@ -96,9 +97,18 @@ class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // reset pin if there is any lifecycle change
+    setState(() {
+      smsCode = widget.clearOnAppStateChange ? '' : smsCode;
+    });
+  }
+
+  @override
   void dispose() {
     delayTimer?.cancel();
     delayAnimationController?.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -108,7 +118,6 @@ class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
     double _widgetWidth = _screenWidth * 0.8;
     if (_widgetWidth < widget.minWidth) _widgetWidth = widget.minWidth;
     if (_widgetWidth > widget.maxWidth) _widgetWidth = widget.maxWidth;
-    String smsCode = widget.pin;
 
     Widget _buildErrorDelayProgress() {
       return Container(
@@ -236,7 +245,6 @@ class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
                           smsCode = "";
                         }
                       }
-                      widget.onPinChanged(smsCode);
                     },
                     onBackPressed: () {
                       int codeLength = smsCode.length;
@@ -244,7 +252,6 @@ class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
                         setState(() {
                           smsCode = smsCode.substring(0, codeLength - 1);
                         });
-                      widget.onPinChanged(smsCode);
                     },
                   ),
                   SizedBox(
