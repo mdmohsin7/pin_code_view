@@ -22,6 +22,7 @@ class PinCode extends StatefulWidget {
   final double bulletSize;
   final int errorDelaySeconds;
   final Color errorDelayProgressColor;
+  final bool clearOnAppStateChange;
 
   PinCode({
     this.title,
@@ -64,22 +65,25 @@ class PinCode extends StatefulWidget {
     this.backgroundImage,
     this.errorDelaySeconds,
     this.errorDelayProgressColor = Colors.white,
+    this.clearOnAppStateChange = false,
   });
 
   PinCodeState createState() => PinCodeState();
 }
 
-class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
-  String smsCode = "";
+class PinCodeState extends State<PinCode>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   bool isFailed = false;
   bool isDisabled = false;
   AnimationController delayAnimationController;
   Animation<double> delayAnimation;
   Timer delayTimer;
+  String smsCode = '';
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     if (widget.errorDelaySeconds != null) {
       delayAnimationController = AnimationController(
@@ -93,9 +97,18 @@ class PinCodeState extends State<PinCode> with SingleTickerProviderStateMixin {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // reset pin if there is any lifecycle change
+    setState(() {
+      smsCode = widget.clearOnAppStateChange ? '' : smsCode;
+    });
+  }
+
+  @override
   void dispose() {
     delayTimer?.cancel();
     delayAnimationController?.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
