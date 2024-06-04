@@ -9,6 +9,8 @@ void main() {
       title: Text("Verify Code"),
       subTitle:
           Text("A code has been sent to your device, please enter it here."),
+      onCodeFail: () {},
+      onCodeSuccess: () {},
     ));
 
     var title = find.text("Verify Code");

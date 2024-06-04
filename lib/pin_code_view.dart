@@ -11,8 +11,8 @@ class PinCode extends StatefulWidget {
   final int codeLength;
   final TextStyle keyTextStyle, codeTextStyle, errorTextStyle;
   final bool obscurePin;
-  final Color backgroundColor;
-  final ImageProvider backgroundImage;
+  final Color? backgroundColor;
+  final ImageProvider? backgroundImage;
   final double minWidth;
   final double maxWidth;
   final double keyMaxSize;
@@ -20,19 +20,19 @@ class PinCode extends StatefulWidget {
   final bool showKeyLetters;
   final bool showBullets;
   final double bulletSize;
-  final int errorDelaySeconds;
+  final int? errorDelaySeconds;
   final Color errorDelayProgressColor;
   final bool clearOnAppStateChange;
 
   PinCode({
-    this.title,
+    required this.title,
     this.correctPin = "****", // Default Value, use onCodeFail as onEnteredPin
     this.error = '',
-    this.subTitle,
+    required this.subTitle,
     this.codeLength = 6,
     this.obscurePin = false,
-    this.onCodeSuccess,
-    this.onCodeFail,
+    required this.onCodeSuccess,
+    required this.onCodeFail,
     this.errorTextStyle = const TextStyle(color: Colors.red, fontSize: 15),
     this.keyTextStyle = const TextStyle(color: Colors.white, fontSize: 25.0),
     this.codeTextStyle = const TextStyle(
@@ -75,9 +75,9 @@ class PinCodeState extends State<PinCode>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   bool isFailed = false;
   bool isDisabled = false;
-  AnimationController delayAnimationController;
-  Animation<double> delayAnimation;
-  Timer delayTimer;
+  AnimationController? delayAnimationController;
+  Animation<double>? delayAnimation;
+  Timer? delayTimer;
   String smsCode = '';
 
   @override
@@ -87,9 +87,9 @@ class PinCodeState extends State<PinCode>
 
     if (widget.errorDelaySeconds != null) {
       delayAnimationController = AnimationController(
-          vsync: this, duration: Duration(seconds: widget.errorDelaySeconds));
+          vsync: this, duration: Duration(seconds: widget.errorDelaySeconds!));
       delayAnimation =
-          Tween(begin: 0.0, end: 1.0).animate(delayAnimationController)
+          Tween(begin: 0.0, end: 1.0).animate(delayAnimationController!)
             ..addListener(() {
               setState(() {});
             });
@@ -127,7 +127,7 @@ class PinCodeState extends State<PinCode>
           padding: EdgeInsets.all(1),
           decoration: BoxDecoration(
             border: Border.all(
-                color: delayAnimation.value > 0
+                color: delayAnimation != null && delayAnimation!.value > 0
                     ? widget.errorDelayProgressColor
                     : Colors.transparent),
             borderRadius: BorderRadius.circular(6),
@@ -135,7 +135,7 @@ class PinCodeState extends State<PinCode>
           child: ClipRRect(
             borderRadius: BorderRadius.circular(3),
             child: LinearProgressIndicator(
-              value: delayAnimation.value,
+              value: delayAnimation?.value ?? null,
               valueColor:
                   AlwaysStoppedAnimation(widget.errorDelayProgressColor),
               backgroundColor: Colors.transparent,
@@ -150,7 +150,7 @@ class PinCodeState extends State<PinCode>
         color: widget.backgroundColor ?? Theme.of(context).primaryColor,
         image: widget.backgroundImage != null
             ? DecorationImage(
-                image: widget.backgroundImage,
+                image: widget.backgroundImage!,
                 fit: BoxFit.cover,
               )
             : null,
@@ -230,11 +230,11 @@ class PinCodeState extends State<PinCode>
                             setState(() {
                               isDisabled = true;
                             });
-                            delayAnimationController.forward();
+                            delayAnimationController!.forward();
                             delayTimer = Timer(
-                                Duration(seconds: widget.errorDelaySeconds),
+                                Duration(seconds: widget.errorDelaySeconds!),
                                 () {
-                              delayAnimationController.reset();
+                              delayAnimationController!.reset();
                               setState(() {
                                 isDisabled = false;
                                 isFailed = false;

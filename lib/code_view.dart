@@ -3,21 +3,21 @@ import 'dart:core';
 
 class CodeView extends StatefulWidget {
   CodeView({
-    this.code,
+    required this.code,
     this.length = 6,
     this.codeTextStyle,
-    this.obscurePin,
-    this.width,
-    this.showBullets,
-    this.bulletSize,
-    this.bulletDecoration,
-    this.codeDecoration,
+    this.obscurePin = true,
+    required this.width,
+    required this.showBullets,
+    required this.bulletSize,
+    required this.bulletDecoration,
+    required this.codeDecoration,
   });
 
   final String code;
   final int length;
   final bool obscurePin;
-  final TextStyle codeTextStyle;
+  final TextStyle? codeTextStyle;
   final BoxDecoration bulletDecoration, codeDecoration;
   final double width;
   final bool showBullets;
@@ -30,7 +30,7 @@ class CodeViewState extends State<CodeView> {
   Widget getCodeAt(index) {
     String code;
 
-    if (widget.code == null || widget.code.length < index)
+    if (widget.code.length < index)
       code = "  ";
     else if (widget.obscurePin) {
       code = "•";
@@ -46,7 +46,7 @@ class CodeViewState extends State<CodeView> {
   }
 
   Widget getBulletAt(index) {
-    if (widget.code == null || widget.code.length < index)
+    if (widget.code.length < index)
       return Container();
     else {
       return Container(

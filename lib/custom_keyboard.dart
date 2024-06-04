@@ -10,14 +10,14 @@ class CustomKeyboard extends StatefulWidget {
   final bool isDisabled;
 
   CustomKeyboard({
-    this.onBackPressed,
-    this.onPressedKey,
-    this.textStyle,
-    this.width,
-    this.numPadMaxSize,
-    this.keyDecoration,
-    this.showLetters,
-    this.isDisabled,
+    required this.onBackPressed,
+    required this.onPressedKey,
+    required this.textStyle,
+    required this.width,
+    required this.numPadMaxSize,
+    required this.keyDecoration,
+    required this.showLetters,
+    required this.isDisabled,
   });
 
   CustomKeyboardState createState() => CustomKeyboardState();
@@ -122,17 +122,18 @@ class CustomKeyboardState extends State<CustomKeyboard> {
 
 class NumPad extends StatelessWidget {
   const NumPad({
-    Key key,
+    Key? key,
     this.digit,
     this.icon,
     this.letters,
-    @required this.widget,
-  }) : super(key: key);
+    required this.widget,
+  })  : assert(digit != null || icon != null),
+        super(key: key);
 
   final CustomKeyboard widget;
-  final String digit;
-  final String letters;
-  final Widget icon;
+  final String? digit;
+  final String? letters;
+  final Widget? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -154,12 +155,12 @@ class NumPad extends StatelessWidget {
                 child: Center(
                     child: icon != null
                         ? icon
-                        : Text(digit, style: widget.textStyle)),
+                        : Text(digit!, style: widget.textStyle)),
               )
             : InkWell(
                 borderRadius: _isCircle
                     ? BorderRadius.circular(_numPadSize / 2)
-                    : widget.keyDecoration.borderRadius,
+                    : widget.keyDecoration.borderRadius as BorderRadius?,
                 onTap: widget.isDisabled
                     ? null
                     : () => icon != null
@@ -179,15 +180,15 @@ class NumPad extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        icon != null
-                            ? icon
-                            : Text(digit, style: widget.textStyle),
+                        icon ?? Text(digit!, style: widget.textStyle),
                         widget.showLetters
                             ? Text(
-                                letters != null ? letters : ' ',
+                                letters ?? ' ',
                                 style: TextStyle(
                                   color: widget.textStyle.color,
-                                  fontSize: widget.textStyle.fontSize / 2.5,
+                                  fontSize: widget.textStyle.fontSize != null
+                                      ? (widget.textStyle.fontSize! / 2.5)
+                                      : null,
                                 ),
                               )
                             : Container(),
